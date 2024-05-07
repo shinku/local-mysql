@@ -4,16 +4,17 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run build && node ./dist/bin.js && jest -ts -coverage",
     "test-bin": "npm run build && npm rum test-pure-bin",
     "test-pure-bin": "jest ./test/bin.test.ts -ts",
     "test-sql": "npm run build && node ./dist/bin.js && jest ./test/sql.test.ts -ts",
+    "test-instance":"node ./dist/bin.js && jest ./test/instance.test.ts -ts",
     "build": "rm -rf ./dist && npx tsc"
   },
   "bin": {
     "local-mysql": "./dist/bin.js"
   },
-  "author": "",
+  "author": "shingu.gu",
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^29.5.12",

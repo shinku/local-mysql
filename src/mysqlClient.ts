@@ -1,43 +1,40 @@
-import { Pool, createPool } from "mysql2";
+import { Pool } from "mysql2";
+import { Connection, createConnection } from "mysql2/promise";
 import { ILocalMysqlOption } from "./IConfig";
 export const defaultPassword = '1234567890'
 export class MysqlClient {
   config: ILocalMysqlOption;
   client: any;
-  rootPool: Pool;
+  rootPool: Connection;
   clusterPool: Pool;
   pool:Pool;
+  connection: Connection
   constructor(config: ILocalMysqlOption){
     this.config = config;
   }
-  private connectRoot(){
-    return new Promise(res=>{
-      const config = this.config;
-      this.rootPool = createPool({
-        host     : "127.0.0.1",
-        user     : 'root',
-        password : defaultPassword,
-        port: Number(config.port || 3306)
-      })
-      this.pool = this.rootPool;
-      res(this.rootPool)
-    })
+  private async connectRoot(){
+    const config = this.config;
+    this.connection = await createConnection({
+      host     : "127.0.0.1",
+      user     : 'root',
+      password : defaultPassword,
+      port: Number(config.port || 3306)
+    });
+    this.connection.connect();
+    return this.connection;
+
   }
-  connect(){
-    console.log("start connect " , this.config)
-    return new Promise(res=>{
-      const config = this.config;
-      this.clusterPool = createPool({
-        // localhost as default
-        host     : "127.0.0.1",
-        user     : config.username,
-        password : config.password,
-        database: config.database,
-        port: Number(config.port || 3306)
-      })
-      this.pool = this.clusterPool;
-      res(this.clusterPool)
+  async connect(){
+    const config = this.config;
+    this.connection = await  createConnection({
+      host     : "127.0.0.1",
+      user     : config.username,
+      password : config.password,
+      database: config.database,
+      port: Number(config.port || 3306)
     })
+    await this.connection.connect();
+    return this.connection
   }
   
   async initDataBase(){
@@ -55,7 +52,7 @@ export class MysqlClient {
     await this.query(`CREATE USER IF NOT EXISTS '${config.username}'@'%' IDENTIFIED BY '${config.password}';`)
     await this.query(`GRANT ALL PRIVILEGES ON ${config.database}.* TO '${config.username}'@'%';`)
     await this.query('FLUSH PRIVILEGES;')
-    this.removeRoot(this.rootPool);
+    this.connection.destroy();
   }
   
   async removeRoot(pool: Pool){
@@ -70,19 +67,8 @@ export class MysqlClient {
    * @returns 
    */
   async query(sql:string, param:any = {}){
-    console.info(`[sql]:${sql}`)
-    return new Promise<any>((resolve, reject) => {
-      this.pool.getConnection((_err, connection)=>{
-        connection.query(sql,param,(err, result)=>{
-          if(result) {
-            resolve(result)
-          } 
-          if(err) {
-            console.log(`[err]:${err.message}`)
-            reject(err)
-          }
-        })
-      })
-    })
+    console.info(`[query_sql]:${sql}`)
+    const result = await this.connection.query(sql, param)
+    return result[0];
   }
 }

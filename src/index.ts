@@ -9,8 +9,7 @@ export const startVm = async (vmType:TVmType )=>{
   await vm?.startVm()
 }
 const config = getPackageJsonConfig()
-const client = new MysqlClient(config);
-client.connect();
+let client: MysqlClient;
 /**
  * 初始化sql
  * @param paths 
@@ -31,7 +30,7 @@ export const initSql = async (paths: string[])=>{
 
 export const deleteSql = async ()=>{
   await query(`use ${config.database}`)
-  const tables = await query('show tables')
+  const tables = await query('show tables') as any[]
   for(const value of tables) {
     await query(`delete from ${Object.values(value)[0]}`)
   }
@@ -53,5 +52,10 @@ export const trimSql = (str:string)=>{
  * @returns 
  */
 export const query = async (sql:string)=>{
+  if(!client) {
+    client = new MysqlClient(config);
+    await client.connect();
+  }
+  if(!sql) return;
   return await client.query(sql)
 }

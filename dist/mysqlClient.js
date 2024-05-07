@@ -48,7 +48,7 @@ var MysqlClient = /** @class */ (function () {
         return new Promise(function (res) {
             var config = _this.config;
             _this.rootPool = (0, mysql2_1.createPool)({
-                host: config.host,
+                host: "127.0.0.1",
                 user: 'root',
                 password: exports.defaultPassword,
                 port: Number(config.port || 3306)
@@ -63,7 +63,8 @@ var MysqlClient = /** @class */ (function () {
         return new Promise(function (res) {
             var config = _this.config;
             _this.clusterPool = (0, mysql2_1.createPool)({
-                host: config.host,
+                // localhost as default
+                host: "127.0.0.1",
                 user: config.username,
                 password: config.password,
                 database: config.database,

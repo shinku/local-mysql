@@ -138,7 +138,10 @@ exports.trimSql = trimSql;
 var query = function (sql) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, client.query(sql)];
+            case 0:
+                if (!sql)
+                    return [2 /*return*/];
+                return [4 /*yield*/, client.query(sql)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
