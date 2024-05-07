@@ -32,5 +32,9 @@
     "port": 3307,
     "username": "shingu",
     "database":"shin_db_test"
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/shinku/local-mysql.git"
   }
 }
