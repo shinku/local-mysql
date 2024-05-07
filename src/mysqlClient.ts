@@ -14,7 +14,7 @@ export class MysqlClient {
     return new Promise(res=>{
       const config = this.config;
       this.rootPool = createPool({
-        host     : config.host,
+        host     : "127.0.0.1",
         user     : 'root',
         password : defaultPassword,
         port: Number(config.port || 3306)
@@ -28,7 +28,8 @@ export class MysqlClient {
     return new Promise(res=>{
       const config = this.config;
       this.clusterPool = createPool({
-        host     : config.host,
+        // localhost as default
+        host     : "127.0.0.1",
         user     : config.username,
         password : config.password,
         database: config.database,
