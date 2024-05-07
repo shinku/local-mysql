@@ -1,0 +1,35 @@
+{
+  "name": "local-mysql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-bin": "npm run build && npm rum test-pure-bin",
+    "test-pure-bin": "jest ./test/bin.test.ts -ts",
+    "test-sql": "npm run build && node ./dist/bin.js && jest ./test/sql.test.ts -ts",
+    "build": "rm -rf ./dist && npx tsc"
+  },
+  "bin": {
+    "local-mysql": "./dist/bin.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.8",
+    "container-helper.js": "^1.0.1",
+    "jest": "^29.7.0",
+    "mysql2": "^3.9.7",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
+  },
+  "local_mysql":{
+    "vmtype":"docker",
+    "host": "127.0.0.1",
+    "password":"1234567",
+    "port": 3307,
+    "username": "shingu",
+    "database":"shin_db_test"
+  }
+}

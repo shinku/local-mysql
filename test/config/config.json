@@ -1,0 +1,8 @@
+{
+  "vmtype":"docker",
+  "host": "127.0.0.1",
+  "password":"1234567",
+  "port": 3307,
+  "username": "shin",
+  "database":"shin_db_test"
+}
