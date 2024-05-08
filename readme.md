@@ -1,5 +1,5 @@
-if you are coding in a nodejs project.
-and you need test your code with a temp mysql, then this is a tool for you.
+这是一个利用容器技术，快速在本地创建mysql环境，并提供数据准备的单元测试工具。
+这个模块会为单元测试提供一个临时性的本地数据库环境，避免你的单元测试数据影响到线上的数据。
 
 ## 安装
 + 安装local-mysql模块
@@ -61,6 +61,14 @@ test("xxxx",async ()=>{
 })
 
 ```
+
+
+# TRANSLATE ENGLISH
+
+
+
+This is a unit testing tool that utilizes container technology to quickly create a MySQL environment locally and provide data preparation.
+This module will provide a temporary local database environment for unit testing, avoiding the impact of your unit testing data on online data.
 
 ## how to install
 + install local-mysql
