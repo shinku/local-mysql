@@ -37,41 +37,57 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MysqlClient = exports.defaultPassword = void 0;
-var mysql2_1 = require("mysql2");
+var promise_1 = require("mysql2/promise");
 exports.defaultPassword = '1234567890';
 var MysqlClient = /** @class */ (function () {
     function MysqlClient(config) {
         this.config = config;
     }
     MysqlClient.prototype.connectRoot = function () {
-        var _this = this;
-        return new Promise(function (res) {
-            var config = _this.config;
-            _this.rootPool = (0, mysql2_1.createPool)({
-                host: "127.0.0.1",
-                user: 'root',
-                password: exports.defaultPassword,
-                port: Number(config.port || 3306)
+        return __awaiter(this, void 0, void 0, function () {
+            var config, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        config = this.config;
+                        _a = this;
+                        return [4 /*yield*/, (0, promise_1.createConnection)({
+                                host: "127.0.0.1",
+                                user: 'root',
+                                password: exports.defaultPassword,
+                                port: Number(config.port || 3306)
+                            })];
+                    case 1:
+                        _a.connection = _b.sent();
+                        this.connection.connect();
+                        return [2 /*return*/, this.connection];
+                }
             });
-            _this.pool = _this.rootPool;
-            res(_this.rootPool);
         });
     };
     MysqlClient.prototype.connect = function () {
-        var _this = this;
-        console.log("start connect ", this.config);
-        return new Promise(function (res) {
-            var config = _this.config;
-            _this.clusterPool = (0, mysql2_1.createPool)({
-                // localhost as default
-                host: "127.0.0.1",
-                user: config.username,
-                password: config.password,
-                database: config.database,
-                port: Number(config.port || 3306)
+        return __awaiter(this, void 0, void 0, function () {
+            var config, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        config = this.config;
+                        _a = this;
+                        return [4 /*yield*/, (0, promise_1.createConnection)({
+                                host: "127.0.0.1",
+                                user: config.username,
+                                password: config.password,
+                                database: config.database,
+                                port: Number(config.port || 3306)
+                            })];
+                    case 1:
+                        _a.connection = _b.sent();
+                        return [4 /*yield*/, this.connection.connect()];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, this.connection];
+                }
             });
-            _this.pool = _this.clusterPool;
-            res(_this.clusterPool);
         });
     };
     MysqlClient.prototype.initDataBase = function () {
@@ -119,7 +135,7 @@ var MysqlClient = /** @class */ (function () {
                         return [4 /*yield*/, this.query('FLUSH PRIVILEGES;')];
                     case 7:
                         _c.sent();
-                        this.removeRoot(this.rootPool);
+                        this.connection.destroy();
                         return [2 /*return*/];
                 }
             });
@@ -141,23 +157,17 @@ var MysqlClient = /** @class */ (function () {
      */
     MysqlClient.prototype.query = function (sql_1) {
         return __awaiter(this, arguments, void 0, function (sql, param) {
-            var _this = this;
+            var result;
             if (param === void 0) { param = {}; }
             return __generator(this, function (_a) {
-                console.info("[sql]:".concat(sql));
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        _this.pool.getConnection(function (_err, connection) {
-                            connection.query(sql, param, function (err, result) {
-                                if (result) {
-                                    resolve(result);
-                                }
-                                if (err) {
-                                    console.log("[err]:".concat(err.message));
-                                    reject(err);
-                                }
-                            });
-                        });
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        console.info("[query_sql]:".concat(sql));
+                        return [4 /*yield*/, this.connection.query(sql, param)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result[0]];
+                }
             });
         });
     };

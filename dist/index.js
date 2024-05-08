@@ -56,8 +56,7 @@ var startVm = function (vmType) { return __awaiter(void 0, void 0, void 0, funct
 }); };
 exports.startVm = startVm;
 var config = (0, tools_1.getPackageJsonConfig)();
-var client = new mysqlClient_1.MysqlClient(config);
-client.connect();
+var client;
 /**
  * 初始化sql
  * @param paths
@@ -139,10 +138,17 @@ var query = function (sql) { return __awaiter(void 0, void 0, void 0, function (
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                if (!!client) return [3 /*break*/, 2];
+                client = new mysqlClient_1.MysqlClient(config);
+                return [4 /*yield*/, client.connect()];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
                 if (!sql)
                     return [2 /*return*/];
                 return [4 /*yield*/, client.query(sql)];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 3: return [2 /*return*/, _a.sent()];
         }
     });
 }); };

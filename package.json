@@ -33,6 +33,7 @@
     "username": "shingu",
     "database":"shin_db_test"
   },
+  "keywords": ["docker","mysql","nodejs","unit testing"],
   "repository": {
     "type": "github",
     "url": "https://github.com/shinku/local-mysql.git"

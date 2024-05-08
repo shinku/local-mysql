@@ -17,5 +17,5 @@ export declare const trimSql: (str: string) => string;
  * @param sql
  * @returns
  */
-export declare const query: (sql: string) => Promise<any>;
+export declare const query: (sql: string) => Promise<import("mysql2").QueryResult>;
 export {};
